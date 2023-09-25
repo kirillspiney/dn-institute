@@ -27,17 +27,20 @@ jobs:
     outputs:
       readable: ${{ steps.readability-check.outputs.readable }}
     steps:
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
       - name: Install readability
         run: 
           npm install @mozilla/readability
       - name: Check document readability
         id: readability-check
-        uses: actions/nodejs-script@v1
-        with:
-            script:
-              const Readability = require('@mozilla/readability');
-              const readable = Readability.isProbablyReaderable(document);
-              echo "readable=$readable" >> $GITHUB_OUTPUT;
+        run: 
+          const Readability = require('@mozilla/readability');
+          const readable = Readability.isProbablyReaderable(document);
+          echo "readable=$readable" >> $GITHUB_OUTPUT;
 
 
 

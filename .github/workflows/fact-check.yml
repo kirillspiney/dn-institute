@@ -40,7 +40,7 @@ jobs:
         id: readability-check
         run: 
           node -e "var { Readability } = require('@mozilla/readability');
-          var readable = Readability.isProbablyReaderable(document)";
+          var readable = Readability.isProbablyReaderable(content)";
           echo "readable=$readable" >> $GITHUB_OUTPUT
 
 

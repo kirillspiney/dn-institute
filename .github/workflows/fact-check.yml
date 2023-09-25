@@ -35,7 +35,8 @@ jobs:
         uses: actions/nodejs-script@v1
         with:
             script:
-              const readable = Readability.isProbablyReaderable(document)
+              const Readability = require('@mozilla/readability');
+              const readable = Readability.isProbablyReaderable(document);
               echo "readable=$readable" >> $GITHUB_OUTPUT;
 
 

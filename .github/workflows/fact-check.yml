@@ -39,8 +39,8 @@ jobs:
       - name: Check document readability
         id: readability-check
         run: 
-          const { Readability } = require('@mozilla/readability')
-          const readable = Readability.isProbablyReaderable(document)
+          var { Readability } = require('@mozilla/readability');
+          var readable = Readability.isProbablyReaderable(document);
           echo "readable=$readable" >> $GITHUB_OUTPUT
 
 

@@ -27,6 +27,9 @@ jobs:
     outputs:
       readable: ${{ steps.readability-check.outputs.readable }}
     steps:
+      - name: Install readability
+        run: 
+          npm install @mozilla/readability
       - name: Check document readability
         id: readability-check
         run: |

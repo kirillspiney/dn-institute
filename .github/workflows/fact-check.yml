@@ -30,9 +30,13 @@ jobs:
       - name: Install readability
         run: 
           npm install @mozilla/readability
+      - name: Install Node.js 
+        run: 
+          apt-get install nodejs
       - name: Check document readability
         id: readability-check
         run: |
+          node
           const readable = Readability.isProbablyReaderable(document)
           echo "readable=$readable" >> $GITHUB_OUTPUT;
 

@@ -36,21 +36,12 @@ jobs:
       - name: Install readability
         run: 
           npm install @mozilla/readability
-      - name: Get content
-        id: get_content
-        run: 
-          echo "${{ github.event.issue.body }}" > content
-          @outputs.content = ${{ steps.get_content.outputs.content }}
-
       - name: Check document readability
         id: readability-check
-        run:
-          content=`cat ${{ inputs.content_path }}` 
+        run: 
           node -e "var { Readability } = require('@mozilla/readability');
           var readable = Readability.isProbablyReaderable(content)";
           echo "readable=$readable" >> $GITHUB_OUTPUT
-      inputs:
-        content_path: ${{ steps.get_content.outputs.content }}
 
 
 

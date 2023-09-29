@@ -21,35 +21,12 @@ jobs:
         shell: bash
         run: |
           echo "defined=${{ contains(fromJSON(secrets.WIKI_REVIEWERS), github.actor) }}" >> $GITHUB_OUTPUT;
-  readability-check:
-    runs-on: ubuntu-latest
-    needs: [permission-check-job]
-    outputs:
-      readable: ${{ steps.readability-check.outputs.readable }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-
-      - name: Install readability
-        run: 
-          npm install @mozilla/readability
-      - name: Check document readability
-        id: readability-check
-        run: 
-          node -e "var { Readability } = require('@mozilla/readability');
-          var readable = Readability.isProbablyReaderable(content)";
-          echo "readable=$readable" >> $GITHUB_OUTPUT
-
-
 
   fact-check:
     runs-on: ubuntu-latest
     name: "Verify statements in content diff for truthness"
-    needs: [permission-check-job, readability-check]
-    if: needs.permission-check-job.outputs.permission == 'true' && needs.readability-check.outputs.readable == 'true'
+    needs: [permission-check-job]
+    if: needs.permission-check-job.outputs.permission == 'true'
     steps:
       - uses: actions/checkout@v3
 
@@ -62,6 +39,10 @@ jobs:
       - name: Install package
         run: pipx install poetry && poetry install --no-interaction
 
+      - name: Install Readability
+        run: | 
+          npm install @mozilla/readability
+
       - name: Run script 
         run: |
           poetry run fact-check \
@@ -69,3 +50,4 @@ jobs:
             --github-token "${{ secrets.GITHUB_TOKEN }}" \
             --openai-key "${{ secrets.OPENAI_KEY }}" \
             --content-path "content"
+            --readability-module "@mozilla/readability"
